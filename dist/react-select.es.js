@@ -1122,7 +1122,7 @@ var Select$1 = function (_React$Component) {
 					if (this.state.isOpen) {
 						this.selectFocusedOption();
 					} else {
-						this.focusNextOption();
+						this.focusStartForce(true);
 					}
 					break;
 				case 27:
@@ -1152,22 +1152,38 @@ var Select$1 = function (_React$Component) {
 				case 38:
 					// up
 					event.preventDefault();
-					this.focusPreviousOption();
+					if (this.state.isOpen) {
+						this.focusPreviousOption();
+					} else {
+						this.focusStartForce(true);
+					}
 					break;
 				case 40:
 					// down
 					event.preventDefault();
-					this.focusNextOption();
+					if (this.state.isOpen) {
+						this.focusNextOption();
+					} else {
+						this.focusStartForce(true);
+					}
 					break;
 				case 33:
 					// page up
 					event.preventDefault();
-					this.focusPageUpOption();
+					if (this.state.isOpen) {
+						this.focusPageUpOption();
+					} else {
+						this.focusStartForce(true);
+					}
 					break;
 				case 34:
 					// page down
 					event.preventDefault();
-					this.focusPageDownOption();
+					if (this.state.isOpen) {
+						this.focusPageDownOption();
+					} else {
+						this.focusStartForce(true);
+					}
 					break;
 				case 35:
 					// end key
@@ -1404,6 +1420,21 @@ var Select$1 = function (_React$Component) {
 		key: 'focusStartOption',
 		value: function focusStartOption() {
 			this.focusAdjacentOption('start');
+		}
+	}, {
+		key: 'focusStartForce',
+		value: function focusStartForce(open) {
+			var isOpen = open === undefined ? false : open;
+			var options = this._visibleOptions.map(function (option, index) {
+				return { option: option, index: index };
+			}).filter(function (option) {
+				return !option.option.disabled;
+			});
+			this.setState({
+				focusedIndex: options[0].index,
+				focusedOption: options[0].option,
+				isOpen: isOpen
+			});
 		}
 	}, {
 		key: 'focusEndOption',

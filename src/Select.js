@@ -486,7 +486,7 @@ class Select extends React.Component {
 				if (this.state.isOpen) {
 					this.selectFocusedOption();
 				} else {
-					this.focusNextOption();
+                                        this.focusStartForce(true);
 				}
 				break;
 			case 27: // escape
@@ -513,19 +513,35 @@ class Select extends React.Component {
 				break;
 			case 38: // up
 				event.preventDefault();
-				this.focusPreviousOption();
+				if (this.state.isOpen) {
+                                        this.focusPreviousOption();
+				} else {
+                                        this.focusStartForce(true);
+				}
 				break;
 			case 40: // down
 				event.preventDefault();
-				this.focusNextOption();
+				if (this.state.isOpen) {
+					this.focusNextOption();
+				} else {
+                                        this.focusStartForce(true);
+				}
 				break;
 			case 33: // page up
 				event.preventDefault();
-				this.focusPageUpOption();
+				if (this.state.isOpen) {
+                                        this.focusPageUpOption();
+				} else {
+                                        this.focusStartForce(true);
+				}
 				break;
 			case 34: // page down
 				event.preventDefault();
-				this.focusPageDownOption();
+				if (this.state.isOpen) {
+                                        this.focusPageDownOption();
+				} else {
+                                        this.focusStartForce(true);
+				}
 				break;
 			case 35: // end key
 				if (event.shiftKey) {
@@ -718,6 +734,18 @@ class Select extends React.Component {
 	focusStartOption () {
 		this.focusAdjacentOption('start');
 	}
+        
+        focusStartForce (open) {
+                const isOpen = open === undefined ? false : open;
+		const options = this._visibleOptions
+			.map((option, index) => ({ option, index }))
+			.filter(option => !option.option.disabled);
+		this.setState({
+			focusedIndex: options[0].index,
+			focusedOption: options[0].option,
+                        isOpen,
+		});
+        }
 
 	focusEndOption () {
 		this.focusAdjacentOption('end');
